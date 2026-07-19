@@ -67,10 +67,19 @@ export default function BeatCard({ beat }: { beat: Beat }) {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border border-gold/15 rounded-full" />
         </div>
 
-        <div className="text-center">
-          <span className="text-4xl">🎵</span>
-          <p className="text-xs text-gold/60 mt-2 font-medium tracking-widest uppercase">Raidar Lost</p>
-        </div>
+        {beat.coverArt ? (
+  <img
+    src={beat.coverArt}
+    alt={beat.title}
+    className="absolute inset-0 w-full h-full object-cover"/>
+) : (
+  <div className="text-center">
+    <span className="text-4xl">🎵</span>
+    <p className="text-xs text-gold/60 mt-2 font-medium tracking-widest uppercase">
+      Raidar Lost
+    </p>
+  </div>
+)}
 
         {/* Play Overlay */}
        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
