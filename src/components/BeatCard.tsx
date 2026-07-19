@@ -67,7 +67,7 @@ export default function BeatCard({ beat }: { beat: Beat }) {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border border-gold/15 rounded-full" />
         </div>
 
-        <div className="text-center z-10">
+        <div className="text-center">
           <span className="text-4xl">🎵</span>
           <p className="text-xs text-gold/60 mt-2 font-medium tracking-widest uppercase">Raidar Lost</p>
         </div>
