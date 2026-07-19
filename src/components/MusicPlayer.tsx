@@ -8,7 +8,12 @@ export default function MusicPlayer() {
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(80);
   const audioRef = useRef<HTMLAudioElement | null>(null);
- 
+ useEffect(() => {
+  if (audioRef.current) {
+    audioRef.current.volume = volume / 100;
+  }
+}, [volume]);
+
  useEffect(() => {
   if (!currentBeat?.audioUrl) return;
 
