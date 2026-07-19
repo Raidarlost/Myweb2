@@ -11,6 +11,9 @@ interface Beat {
   key: string | null;
   price: string;
   duration: number | null;
+  coverArt: string | null;
+  audioUrl: string | null;
+
   plays: number;
   likes: number;
   featured: boolean;
