@@ -8,24 +8,35 @@ export default function MusicPlayer() {
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(80);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+ 
+ useEffect(() => {
+  if (!currentBeat?.audioUrl) return;
 
-  // Simulate playback progress (no real audio files yet)
-  useEffect(() => {
-    if (isPlaying && currentBeat) {
-      intervalRef.current = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            setIsPlaying(false);
-            return 0;
-          }
-          return prev + (100 / ((currentBeat.duration || 200) * 10));
-        });
-      }, 100);
-    } else if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+  if (!audioRef.current) {
+    audioRef.current = new Audio(currentBeat.audioUrl);
+  }
+
+  const audio = audioRef.current;
+
+  if (isPlaying) {
+    audio.play();
+  } else {
+    audio.pause();
+  }
+
+  const updateProgress = () => {
+    if (audio.duration) {
+      setProgress((audio.currentTime / audio.duration) * 100);
     }
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [isPlaying, currentBeat, setIsPlaying]);
+  };
+
+  audio.addEventListener("timeupdate", updateProgress);
+
+  return () => {
+    audio.removeEventListener("timeupdate", updateProgress);
+  };
+}, [isPlaying, currentBeat]);
 
   // Reset progress when changing beats
   useEffect(() => {
