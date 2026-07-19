@@ -61,7 +61,7 @@ export default function BeatCard({ beat }: { beat: Beat }) {
       {/* Cover Art */}
       <div className={`relative aspect-square bg-gradient-to-br ${gradients[gradientIdx]} flex items-center justify-center`}>
         {/* Decorative elements */}
-        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <div className="absolute top-4 left-4 w-16 h-16 border border-gold/20 rounded-full" />
           <div className="absolute bottom-4 right-4 w-24 h-24 border border-gold/10 rounded-full" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border border-gold/15 rounded-full" />
@@ -73,11 +73,10 @@ export default function BeatCard({ beat }: { beat: Beat }) {
         </div>
 
         {/* Play Overlay */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <button
             onClick={handlePlay}
-            className="w-14 h-14 rounded-full bg-gold flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform"
-          >
+         className="w-14 h-14 rounded-full bg-gold flex items-center justify-center">
             {isCurrentlyPlaying ? (
               <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
