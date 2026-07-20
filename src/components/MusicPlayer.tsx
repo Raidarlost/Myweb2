@@ -96,10 +96,19 @@ export default function MusicPlayer() {
             <span className="text-[10px] text-neutral-500 w-10 text-right">{formatTime(progress, totalDuration)}</span>
             <div className="flex-1 h-1 bg-dark-border rounded-full relative cursor-pointer group"
               onClick={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const pct = ((e.clientX - rect.left) / rect.width) * 100;
-                setProgress(Math.max(0, Math.min(100, pct)));
-              }}
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct = Math.max(
+    0,
+    Math.min(100, ((e.clientX - rect.left) / rect.width) * 100)
+  );
+
+  setProgress(pct);
+
+  if (audioRef.current && audioRef.current.duration) {
+    audioRef.current.currentTime =
+      (pct / 100) * audioRef.current.duration;
+  }
+}}
             >
               <div
                 className="h-full bg-gradient-to-r from-gold to-gold-light rounded-full relative"
