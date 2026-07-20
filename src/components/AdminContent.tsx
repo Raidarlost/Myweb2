@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useApp } from "./Providers";
-
+import { supabase } from "@/lib/supabase";
 interface Stats {
   beats: number;
   users: number;
@@ -39,7 +39,8 @@ export default function AdminContent() {
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [audioFile, setAudioFile] = useState<File | null>(null);
   useEffect(() => {
     if (!user || user.role !== "admin") return;
     fetch("/api/admin/stats").then(r => r.json()).then(d => setStats(d));
@@ -67,24 +68,87 @@ export default function AdminContent() {
   }
 
   const handleAddBeat = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
+  e.preventDefault();
+
+  if (!coverFile || !audioFile) {
+    alert("Please select a cover image and an MP3 file.");
+    return;
+  }
+
+  setSaving(true);
+
+  try {
+    const coverPath = `covers/${Date.now()}-${coverFile.name}`;
+    const audioPath = `audio/${Date.now()}-${audioFile.name}`;
+
+    const { error: coverError } = await supabase.storage
+      .from("Beats")
+      .upload(coverPath, coverFile);
+
+    if (coverError) throw coverError;
+
+    const { error: audioError } = await supabase.storage
+      .from("Beats")
+      .upload(audioPath, audioFile);
+
+    if (audioError) throw audioError;
+
+    const coverArt = supabase.storage
+      .from("Beats")
+      .getPublicUrl(coverPath).data.publicUrl;
+
+    const audioUrl = supabase.storage
+      .from("Beats")
+      .getPublicUrl(audioPath).data.publicUrl;
+
     const res = await fetch("/api/admin/beats", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newBeat),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...newBeat,
+        coverArt,
+        audioUrl,
+      }),
     });
-    if (res.ok) {
-      setSaved(true);
-      setNewBeat({ title: "", genre: "Afrobeats", mood: "", bpm: "", key: "", price: "29.99", duration: "", licenseType: "Basic", description: "", featured: false, trending: false, tags: "" });
-      // Refresh beats list
-      fetch("/api/beats?limit=100").then(r => r.json()).then(d => setBeats(d.beats || []));
-      setTimeout(() => setSaved(false), 3000);
-    }
-    setSaving(false);
-  };
 
-  const handleDeleteBeat = async (id: string) => {
+    if (!res.ok) throw new Error("Failed to save beat");
+
+    setSaved(true);
+
+    setNewBeat({
+      title: "",
+      genre: "Afrobeats",
+      mood: "",
+      bpm: "",
+      key: "",
+      price: "29.99",
+      duration: "",
+      licenseType: "Basic",
+      description: "",
+      featured: false,
+      trending: false,
+      tags: "",
+    });
+
+    setCoverFile(null);
+    setAudioFile(null);
+
+    fetch("/api/beats?limit=100")
+      .then(r => r.json())
+      .then(d => setBeats(d.beats || []));
+
+    setTimeout(() => setSaved(false), 3000);
+
+  } catch (err) {
+    console.error(err);
+    alert("Upload failed.");
+  } finally {
+    setSaving(false);
+  }
+};
+ const handleDeleteBeat = async (id: string) => {
     if (!confirm("Delete this beat?")) return;
     await fetch("/api/admin/beats", {
       method: "DELETE",
@@ -310,7 +374,29 @@ export default function AdminContent() {
                 Trending
               </label>
             </div>
+<div>
+  <label className="block text-xs text-neutral-400 mb-1.5">
+    Cover Art
+  </label>
+  <input
+  type="file"
+  accept="image/*"
+  onChange={(e) => setCoverFile(e.target.files?.[0] || null)}
+  className="w-full px-4 py-2.5 rounded-lg bg-dark-surface border border-dark-border text-white text-sm"
+/>
+</div>
 
+<div>
+  <label className="block text-xs text-neutral-400 mb-1.5">
+    Audio File
+  </label>
+  <input
+  type="file"
+  accept=".mp3,audio/*"
+  onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+  className="w-full px-4 py-2.5 rounded-lg bg-dark-surface border border-dark-border text-white text-sm"
+/>
+</div>
             <button type="submit" disabled={saving} className="w-full py-3 rounded-lg btn-gold text-sm disabled:opacity-50">
               {saving ? "Saving..." : "Add Beat"}
             </button>

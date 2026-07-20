@@ -27,6 +27,8 @@ export async function POST(req: NextRequest) {
     licenseType: body.licenseType || "Basic",
     featured: body.featured || false,
     trending: body.trending || false,
+    coverArt: body.coverArt || "",
+    audioUrl: body.audioUrl || "",
     tags: body.tags || "",
     isActive: true,
   }).returning();
