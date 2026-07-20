@@ -34,12 +34,16 @@ export default function MusicPlayer() {
       setProgress((audio.currentTime / audio.duration) * 100);
     }
   };
-
+  const handleEnded = () => {
+   setIsPlaying(false);
+   setProgress(0);
+};
   audio.addEventListener("timeupdate", updateProgress);
-
+  audio.addEventListener("ended", handleEnded);
   return () => {
     audio.removeEventListener("timeupdate", updateProgress);
-  };
+    audio.removeEventListener("ended", handleEnded);    
+ };
 }, [isPlaying, currentBeat]);
 
   // Reset progress when changing beats
