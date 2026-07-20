@@ -93,7 +93,9 @@ export default function MusicPlayer() {
 
           {/* Progress Bar */}
           <div className="w-full flex items-center gap-2">
-            <span className="text-[10px] text-neutral-500 w-10 text-right">{formatTime(progress, totalDuration)}</span>
+            <span className="text-[10px] text-neutral-500 w-20 text-right">
+  {formatTime(progress, totalDuration)} / {Math.floor(totalDuration / 60)}:{(totalDuration % 60).toString().padStart(2, "0")}
+</span>
             <div className="flex-1 h-1 bg-dark-border rounded-full relative cursor-pointer group"
               onClick={(e) => {
   const rect = e.currentTarget.getBoundingClientRect();
@@ -117,9 +119,7 @@ export default function MusicPlayer() {
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-gold opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>
-            <span className="text-[10px] text-neutral-500 w-10">
-              {Math.floor(totalDuration / 60)}:{(totalDuration % 60).toString().padStart(2, "0")}
-            </span>
+      
           </div>
         </div>
 
