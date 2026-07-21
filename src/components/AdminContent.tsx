@@ -141,10 +141,10 @@ export default function AdminContent() {
 
     setTimeout(() => setSaved(false), 3000);
 
-  } catch (err) {
-    console.error(err);
-    alert("Upload failed.");
-  } finally {
+  } catch (err: any) {
+  console.error(err);
+  alert(err?.message || JSON.stringify(err));
+} finally {
     setSaving(false);
   }
 };
