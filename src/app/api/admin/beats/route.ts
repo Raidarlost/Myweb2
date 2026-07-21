@@ -7,7 +7,6 @@ import { slugify } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
   const session = await getSession();
-  console.log("SESSION:", session);
   if (!session || session.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
