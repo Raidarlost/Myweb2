@@ -63,7 +63,7 @@ export default function MusicPlayer() {
   const totalDuration = currentBeat.duration || 200;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[80] glass border-t border-gold/10">
+    <div className="fixed bottom-0 left-0 right-0 z-[80] backdrop-blur-xl bg-black/70 border-t border-gold/20 shadow-[0_-5px_30px_rgba(212,175,55,0.15)]">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
         {/* Beat Info */}
         <div className="flex items-center gap-3 min-w-0 flex-shrink-0 w-48 sm:w-56">
@@ -81,7 +81,7 @@ export default function MusicPlayer() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="w-9 h-9 rounded-full bg-gold flex items-center justify-center hover:bg-gold-light transition-colors"
+              className="w-10 h-10 rounded-full bg-gold flex items-center justify-center hover:scale-110 hover:bg-gold-light transition-all duration-200 shadow-md" 
             >
               {isPlaying ? (
                 <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 24 24">
@@ -97,10 +97,11 @@ export default function MusicPlayer() {
 
           {/* Progress Bar */}
           <div className="w-full flex items-center gap-2">
-            <span className="text-[10px] text-neutral-500 w-20 text-right">
+            <span className="text-[11px] text-neutral-400 w-24 text-right font-mono">
   {formatTime(progress, totalDuration)} / {Math.floor(totalDuration / 60)}:{(totalDuration % 60).toString().padStart(2, "0")}
 </span>
-            <div className="flex-1 h-1 bg-dark-border rounded-full relative cursor-pointer group"
+         
+   <div className="flex-1 h-1.5 bg-dark-border rounded-full relative cursor-pointer group transition-all" 
               onClick={(e) => {
   const rect = e.currentTarget.getBoundingClientRect();
   const pct = Math.max(
@@ -117,7 +118,7 @@ export default function MusicPlayer() {
 }}
             >
               <div
-                className="h-full bg-gradient-to-r from-gold to-gold-light rounded-full relative"
+                className="h-full bg-gradient-to-r from-gold to-gold-light rounded-full relative shadow-[0_0_10px_rgba(212,175,55,0.6)] transition-all"
                 style={{ width: `${progress}%` }}
               >
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-gold opacity-0 group-hover:opacity-100 transition-opacity" />
