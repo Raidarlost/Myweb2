@@ -85,7 +85,7 @@ export default function BeatCard({ beat }: { beat: Beat }) {
        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <button
             onClick={handlePlay}
-         className="w-14 h-14 rounded-full bg-gold flex items-center justify-center transition-transform duration-200 group-hover:scale-110" 
+         className="w-14 h-14 rounded-full bg-gold flex items-center justify-center transition-transform duration-200 group-hover:scale-110"> 
             {isCurrentlyPlaying ? (
               <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
